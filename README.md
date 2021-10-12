@@ -63,6 +63,75 @@ Esto nos permite hacer a los componentes más fáciles de integrar al resto de c
 * Máxima cercanía a la relevancia: El estado debe estar tan cerca como sea posible de donde lo estemos usando y actualizando.
 * Stateful vs stateless: Separar lógica y estado de componentes que manejan UI.
 
-> Ir de lo grande a lo específico.
+> Ir de lo grande a lo específico. -Richard hautmant
 
 Hay que examinar que componentes manejan su propio estado, asumiendo que todos los componentes consumen el estado general de la app queremos encontrar a los componentes que crean un estado aparte del general. De esta manera podemos dividir componentes, de un lado tendremos a los componentes que solo consumen el estado general de la app y esos son componentes stateless(de interfaz, de UI), y del otro lado a los componentes que crean su propio código interno (estado) serán los stateful y siguiendo el principio de separar al estado de la UI podemos dividir a estos componentes con su propio estado en 2 uno stateful, y el otro en stateless.
+
+En resumen:
+
+⭐️ Cuando los componentes nietos de App no solo son nietos, sino también componentes hijos, podemos pasarles props directamente y mejorar su comunicación.
+
+
+Casi siempre que llamamos a un componente… pos lo llamamos y ya. 😅
+```js
+function App() {
+  return (
+    <TodoHeader />
+  );
+}
+
+function TodoHeader() {
+  return (
+    <TodoCounter />
+  );
+}
+```
+Esto implica que para compartir el estado debemos pasar props y props y props por cada componente intermedio entre App y los componentes que realmente necesiten esas props en cualquier lugar de la jerarquía. 😓
+```js
+function App() {
+  const [state, setState] = React.setState(initialState);
+
+  return (
+    <TodoHeaderstate={state}setState={setState} />
+  );
+}
+
+function TodoHeader({ state, setState }) {
+  return (
+    <header>
+      <TodoCounterstate={state}setState={setState} />
+    </header>
+  );
+}
+```
+Pero otra forma de trabajar es que App no solo llame a sus componentes directamente hijos, sino que también llamen a los siguientes componentes en la jerarquía de la aplicación. 😮
+```js
+function App() {
+  return (
+    <TodoHeader>
+      <TodoCounter />
+    </TodoHeader>
+  );
+}
+
+function TodoHeader({ children }) {
+  return (
+    <header>
+      {children}
+    </header>
+  );
+}
+```
+Y esta nueva forma de trabajar implica que ya no tenemos que pasar props y props y props entre App y el resto de componentes para compartir el estado, sino que App puede comunicarse directamente con el componente que realmente necesita ese estado. 🤩
+```js
+function App() {
+  const [state, setState] = React.setState(initialState);
+
+  return (
+    <TodoHeader>
+      <TodoCounterstate={state}setState={setState} />
+    </TodoHeader>
+  );
+}
+```
+💚 Esta es la magia de la composición de componentes.
