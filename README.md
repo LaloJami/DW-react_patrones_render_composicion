@@ -135,3 +135,46 @@ function App() {
 }
 ```
 💚 Esta es la magia de la composición de componentes.
+
+# ¿Qué son las render props y render functions?
+Nos ayudan a elevar nuestra composición de componentes a otro nivel.
+
+Las render props nos permiten ser más específicos sobre que vamos a renderizar, cuando y donde vamos a renderizar cada parte del contenido de nuestros componentes.
+
+## Render Function
+Es el patrón de entregar la información de nuestro componente en una función. No es exclusivo de react context, nosotros podemos crear nuestros propios componentes que usen este patrón, que reciban una función para que le podamos enviar la información que queremos proveer y luego si, renderizar los componentes que ya tienen la info gracias a la función.
+## Render Props
+Cuando ya no mandamos la función dentro del componente, si no que la enviamos en alguna otra propiedad del componente. Podemos jugar con este patrón para que compartir información sea más divertido.
+
+Las *render props* son una técnica avanzada que nos permite reutilizar componentes y lógica, para no tener que reinventar la rueda. Esta técnica se basa en pasar una función como *prop* a un componente, dicha función se encargará de renderizar lo que queremos que contenga este componente, removiendo así la lógica del render hacia otra parte y permitiéndonos reutilizar la lógica que contenga la función.
+
+```jsx
+import React, {useState} from 'react';
+
+export default function App() {
+	const people = [
+		{name: 'Maria', age: 30, id: 1},
+		{name: 'Phoebe', age: 20, id: 2},
+	]
+
+	return (
+    <ListOfPeople
+      data={people}
+      render={
+        ({name, id}) => (<h2 key={id} >Hello, I am { name }</h2>)
+      } 
+      />
+	)
+}
+
+const ListOfPeople = ({render, data}) => {
+	return (
+    <>
+      <h1>My list of people</h1>
+      {data.map((person) => render(person))} 
+			{/*iteramos sobre nuestro array de personas y llamamos a la función render que recibimos en nuestras props, y además le pasamos la información de cada persona. */}
+    </>
+	)
+}
+```
+En el ejemplo anterior renderizamos una lista con el nombre de varias personas, pero el contenido de nuestra lista no lo define el componente `ListOfPeople`, sino `App` por medio de la función `render` que le pasamos a `ListOfPeople` en sus props. 
