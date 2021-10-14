@@ -178,3 +178,23 @@ const ListOfPeople = ({render, data}) => {
 }
 ```
 En el ejemplo anterior renderizamos una lista con el nombre de varias personas, pero el contenido de nuestra lista no lo define el componente `ListOfPeople`, sino `App` por medio de la función `render` que le pasamos a `ListOfPeople` en sus props. 
+
+# React.Children y React.cloneElement
+
+Para poder pasar propiedades especiales a los componentes hijos de nuestros componentes contenedores cuando hacemos composición.
+
+Cuando enviamos más de un componente o elemento hijo al que use CloneElement, la app deja de funcionar y suelta un error. CloneElement necesita recibir un elemento de react, cuando children es más de un componente entonces tenemos un array, para esto existe React.Children que nos ayuda a que CloneElement entienda sin importar cuantos elementos vienen en el props.children.
+```js
+function TodoHeader({ children, loading }) {
+  //No importa si viene un elemento, o dos o null siempre nos devuelve un array
+
+  return (
+    <header>
+      {React.Children.toArray(children).map((child) =>
+        React.cloneElement(child, { loading: loading })
+      )}
+    </header> //Por cada child vamos a llamar a clone element.
+  ); //Crear elemento a partir de otro (elemento, objeto con las props que queramos que tenga)
+}
+```
+No son las herramientas más populares pero pueden ser muy útiles cuando queremos compartir una o ciertas props a los componentes hijos de un componente contenedor.
