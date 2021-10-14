@@ -8,6 +8,7 @@ import { TodoItem } from '../TodoItem';
 import { TodosError } from '../TodosError';
 import { TodosLoading } from '../TodosLoading';
 import { EmptyTodos } from '../EmptyTodos';
+import { EmptySearchResults } from '../EmptySearchResults';
 import { TodoForm } from '../TodoForm';
 import { CreateTodoButton } from '../CreateTodoButton';
 import { Modal } from '../Modal';
@@ -43,9 +44,12 @@ function App() {
         error={error}
         loading={loading}
         searchedTodos={searchedTodos}
+        totalTodos={totalTodos}
+        searchText={searchValue}
         onError={()=><TodosError/>}
         onLoading={()=><TodosLoading/>}
         onEmptyTodos={()=> <EmptyTodos/>}
+        onEmptySearchResults={(text)=> <EmptySearchResults searchText={text}/>}
         render={todo => (
           <TodoItem
             key={todo.text}
