@@ -198,3 +198,82 @@ function TodoHeader({ children, loading }) {
 }
 ```
 No son las herramientas más populares pero pueden ser muy útiles cuando queremos compartir una o ciertas props a los componentes hijos de un componente contenedor.
+# Qué son los High Order Components
+
+Las funciones como las conocemos pueden devolvernos un valor en sus returns, pero estas funciones de “orden superior”, son funciones que devuelven otras funciones.
+
+Si llamamos a la high order function y le enviamos un parámetro no tendremos todavía un resultado, como está devolviendo otra función tenemos que llamar a esa función que obtenemos luego de llamar a la de orden superior, enviarle los nuevos parámetros que necesita la función de retorno y entonces si, obtendremos nuestro resultado.
+
+Los *high order components* (o componentes de orden superior) son componentes que reciben un componente y retornan otro componente con nuevas props o elementos, lo cual nos permite reutilizar lógica dentro de varios componentes.
+
+Para comprenderlo veamos como son las high order functions
+```js
+function highOrderFunction(var1){
+  return function returnFunction(var2){
+    return var1 + var2;
+  }
+}
+
+const withSum1 = highOrderFunction(1);
+const sumTotal = withSum1(2);
+//3
+```
+Ahora veamos a las high order components
+```js
+function Componente(props){
+  return <p>...</p>
+}
+
+function highOrderComponent(){
+  return function Component(props){
+    return <p>...</p>;
+  }
+}
+```
+cuando se lo realiza como el ejemplo anterior no hay mucha diferencia, pero que pasa cuando lo hacemos de la siguiente forma
+```js
+function highOrderFunction(WrappedComponent){
+  return function Componente(props){
+    return (
+      <WrappedComponent
+        {...algoEspecial}
+        {...props}
+      />
+    )
+  }
+}
+```
+Al realizarlo de esta forma podemos encontrar una nueva forma de trabajar con componentes a los cuales les podemos agregar algo especial y pasar pros.
+```js
+function TodoBox(props){
+  return (
+    <div prop={props.algoEspecial}>
+      {props.children}
+    </div>
+  )
+}
+```
+otro ejemplo 
+```js
+function withApi(WrappedComponent){
+  const apuData = fetchApi('https://api.com');
+
+  return function WrappedComponentWithApi(props){
+    if (apiData.loading) return <p>Loading</p>;
+    return (
+      <WrappedComponent data={apiData.json} />
+    );
+  }
+}
+
+// componente aparte 
+function TodoBox(props){
+  return (
+    <p>
+      Tu nombre es {props.data.name}
+    </p>
+  )
+}
+
+const TodoBoxWithApi = withApi(TodoBox);
+```
