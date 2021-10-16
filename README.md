@@ -277,3 +277,40 @@ function TodoBox(props){
 
 const TodoBoxWithApi = withApi(TodoBox);
 ```
+🤔 Pero ¿profe Juan, por qué haces como que no ves la advertencia de missing dependencias en la consola?
+.
+🌈 Los efectos son un tema espectacularmente divertidísimo dentro de React. Una de sus particularidades consideradas entre las más avanzados son las actualizaciones al estado dentro de los efectos y cómo estas afectan a los renders de nuestros componentes.
+.
+Si quieres que estudiemos este tema con la profundidad que merece, responde este comentario con un enorme 💚 y pondremos todo nuestro esfuerzo en grabar un Curso de React.js: Optimización de Render y Debugging.
+
+# Render props vs. High Order Components vs. React Hooks
+
+## Maquetación
+
+Render props o render functions vs React hooks
+
+* Ambas son formas correctas de trabajar y comunes.
+* Las render props suben el nivel de elegancia del código pero también pueden bajar el nivel de código aburrido comparado con los react hooks.
+* Si practicamos mucho podremos usar las render props de manera mucho más saludable para los componentes más estructuralmente importantes de nuestras apps. Nos ayudan a proteger nuestros componentes para que no nos equivoquemos y la maquetación sea correcta.
+
+## Share data, compartir información entre componentes.
+
+Aquí participan todos los patrones.
+
+
+### Render Functions:
+
+* Compartir info con funciones que en sus parámetros nos dejan esa info que necesitamos que nos compartieran.
+* Si necesitamos demasiada info de distintas render functions para un mismo componente deja de verse bien y podría llegar al código spaghetti.
+–
+### HOC:
+
+* Funciones que pueden retornar y retornar y retornar otras funciones hasta que en algún momento retornemos un componente de react y podamos pasarle toda la info.
+* Usarlos es sencillo, envolvemos nuestros componentes en estos HOC y automáticamente van a recibir toda la info que nos querían compartir estos HOC.
+* Si necesitamos la info de muchos HOC’S en un mismo componente tenemos el mismo problema que con las render functions. Código muy horizontal.
+
+### React hooks
+
+* Llamamos al react hook (oficial o custom) y luego consumimos la info en el return del componente.
+* Cuando tenemos muchos llamados a distintos react hooks no hay código horizontal.
+* Ganaron los hooks para compartir info entre varios componentes. 🎉
